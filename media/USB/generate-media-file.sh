@@ -107,22 +107,23 @@ if [ ! -f "${EDGE_CONFIG_DIRECTORY_PATH}/service-account-key.json" ]; then
   exit 1
 fi
 
-echo "cp ${WORKING_DIRECTORY}/media/USB/${K8S_RUNTIME}/meta-data.yaml" "${EDGE_CONFIG_DIRECTORY_PATH}/..."
-echo "cp ${WORKING_DIRECTORY}/media/USB/${K8S_RUNTIME}/user-data.yaml" "${EDGE_CONFIG_DIRECTORY_PATH}/..."
+docker build -t os-image-builder "$(pwd)/docker/os-image-builder"
+
+echo "cp ${WORKING_DIRECTORY}/media/USB/${K8S_RUNTIME}/meta-data.yaml ${EDGE_CONFIG_DIRECTORY_PATH}/..."
 cp "${WORKING_DIRECTORY}/media/USB/${K8S_RUNTIME}/meta-data.yaml" "${EDGE_CONFIG_DIRECTORY_PATH}/"
+echo "cp ${WORKING_DIRECTORY}/media/USB/${K8S_RUNTIME}/user-data.yaml ${EDGE_CONFIG_DIRECTORY_PATH}/..."
 cp "${WORKING_DIRECTORY}/media/USB/${K8S_RUNTIME}/user-data.yaml" "${EDGE_CONFIG_DIRECTORY_PATH}/"
 
 VIAI_INSTALLER_CONFIGURATION_DATA_ISO_DIRECTORY_PATH="$(mktemp -d)"
 echo "Building the OS image builder container image..."
-docker build -t os-image-builder "$(pwd)/docker/os-image-builder"
-
 echo "Creating the CIDATA ISO in ${VIAI_INSTALLER_CONFIGURATION_DATA_ISO_DIRECTORY_PATH}..."
 docker run \
+  --privileged \
   -v "${EDGE_CONFIG_DIRECTORY_PATH}":/tmp/cloud-init-source \
   -v "${VIAI_INSTALLER_CONFIGURATION_DATA_ISO_DIRECTORY_PATH}":/tmp/cloud-init-output \
   os-image-builder:latest \
-  --cloud-init-datasource-source-directory /tmp/cloud-init-source \
-  --cloud-init-datasource-output-directory /tmp/cloud-init-output
+  -d /tmp/cloud-init-source \
+  -o /tmp/cloud-init-output
 
 echo "CIDATA ISO file created successfully, folder path: ${VIAI_INSTALLER_CONFIGURATION_DATA_ISO_DIRECTORY_PATH} , file name: cloud-init-datasource.iso"
 

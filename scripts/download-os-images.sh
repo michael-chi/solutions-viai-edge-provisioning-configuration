@@ -36,7 +36,7 @@ if is_linux; then
 elif is_macos; then
   shasum \
     --algorithm "256" \
-    --check \
+    -c \
     --ignore-missing \
     "${OS_IMAGE_CHECKSUM_FILE_PATH}"
 fi
