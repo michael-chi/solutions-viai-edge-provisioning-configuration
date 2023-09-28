@@ -34,11 +34,11 @@ jobs:
       - uses: actions/checkout@v3
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
-      - name: "Install Docker runtime on MacOS Runner"
+      - name: Install Docker runtime on MacOS Runner
         run: |
           echo "A==>"
           echo "RUNNER_OS=$RUNNER_OS"
-          echo "B==>""
+          echo "B==>"
           echo "${{ matrix.os }}"
           if [ "$RUNNER_OS" == "macOS" ]; then
             echo "Installing Docker..."
