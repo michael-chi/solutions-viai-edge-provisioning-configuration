@@ -236,13 +236,17 @@ append_kubeconfig_path() {
     USER_HOME_PATH="${1}"
     shift
   fi
+  echo "[Info] KUBECONFIG=${KUBECONFIG}"
+  echo "[Info] Appending KUBECONFIG to ${USER_HOME_PATH}/.bashrc"
   echo "export KUBECONFIG=${KUBECONFIG}" >> "${USER_HOME_PATH}/.bashrc"
+
+  echo "[Info] Appending KUBECONFIG to ${USER_HOME_PATH}/.profile"
   echo "export KUBECONFIG=${KUBECONFIG}" >> "${USER_HOME_PATH}/.profile"
 }
 
 append_kubeconfig_path_sandbox() {
   for d in /home; do
-    echo "Appending KUBECONFIG variable to ${TARGET_FILE_PATH}"
-    append_kubeconfig_path "${TARGET_FILE_PATH}"
+    echo "Appending KUBECONFIG variable..."
+    append_kubeconfig_path "$d"
   done
 }
