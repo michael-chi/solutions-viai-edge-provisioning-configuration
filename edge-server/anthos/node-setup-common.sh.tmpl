@@ -228,3 +228,21 @@ setup_nvidia_container_runtime() {
   fi
 
 }
+
+append_kubeconfig_path() {
+  if [ -z ${1} ]; then
+    USER_HOME_PATH="/home/viai-admin"
+  else
+    USER_HOME_PATH="${1}"
+    shift
+  fi
+  echo "export KUBECONFIG=${KUBECONFIG}" >> "${USER_HOME_PATH}/.bashrc"
+  echo "export KUBECONFIG=${KUBECONFIG}" >> "${USER_HOME_PATH}/.profile"
+}
+
+append_kubeconfig_path_sandbox() {
+  for d in /home; do
+    echo "Appending KUBECONFIG variable to ${TARGET_FILE_PATH}"
+    append_kubeconfig_path "${TARGET_FILE_PATH}"
+  done
+}

@@ -21,4 +21,8 @@ export SETUP_DIR
 GOOGLE_APPLICATION_CREDENTIALS=/var/lib/viai/edge-server/anthos-service-account-key.json
 export GOOGLE_APPLICATION_CREDENTIALS
 
+# shellcheck disable=SC2269
+KUBECONFIG="$SETUP_DIR/bmctl-workspace/$ANTHOS_MEMBERSHIP_NAME/$ANTHOS_MEMBERSHIP_NAME-kubeconfig"
+export KUBECONFIG
+
 gcloud config set project "${GOOGLE_CLOUD_DEFAULT_PROJECT}"
