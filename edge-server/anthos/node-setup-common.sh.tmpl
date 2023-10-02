@@ -230,10 +230,13 @@ setup_nvidia_container_runtime() {
 }
 
 append_kubeconfig_path() {
+  echo "[Info] append_kubeconfig_path is invoked..."
   if [ -z ${1} ]; then
+    echo "[Info] No path specified, use default"
     USER_HOME_PATH="/home/viai-admin"
   else
     USER_HOME_PATH="${1}"
+    echo "[Info] USER_HOME_PATH=${USER_HOME_PATH}"
     shift
   fi
   echo "[Info] KUBECONFIG=${KUBECONFIG}"
@@ -246,7 +249,7 @@ append_kubeconfig_path() {
 
 append_kubeconfig_path_sandbox() {
   for d in /home; do
-    echo "Appending KUBECONFIG variable..."
+    echo "Appending KUBECONFIG variable...${d}"
     append_kubeconfig_path "$d"
   done
 }
